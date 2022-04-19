@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Pablo Aguiar Raposo" />
+
+
+<title>Grupo Bimbo Inventory Demand</title>
+
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Pablo Aguiar Raposo</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="Bimbo_Inventory_Demand.html">Bimbo_Inventory_Demand</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Grupo Bimbo Inventory Demand</h1>
+<h3 class="subtitle">Análise de dados + criação de um modelo de machine learning(XGboost) para previsão de demanda</h3>
+<h4 class="author">Pablo Aguiar Raposo</h4>
+<h4 class="date">15/04/2022</h4>
+
+</div>
+
+
+<div id="introdução-motivação-objetivo-carregamento-dos-dados-e-análise-exploratória-inicial" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Introdução: Motivação, objetivo, carregamento dos dados e análise exploratória inicial</h1>
+<p>OBS: Este projeto é baseado em um competição do Kaggle. Os datasets estão presentes em <a href="https://www.kaggle.com/competitions/grupo-bimbo-inventory-demand/data" class="uri">https://www.kaggle.com/competitions/grupo-bimbo-inventory-demand/data</a>. Todo o trabalho foi realizado em linguagem R e o relatório final foi obtido através do Rmarkdown.</p>
+<div id="objetivo" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> Objetivo</h2>
+<p>Analisar os dados disponibilizados pelo Grupo Bimbo(México) e criar um modelo de machine learing usando o XGboost para previsão de demanda</p>
+</div>
+<div id="motivação" class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> Motivação</h2>
+<p>O Grupo Bimbo (<a href="https://www.grupobimbo.com" class="uri">https://www.grupobimbo.com</a>) se esforça para atender a demanda diária dos consumidores por produtos frescos de panificação nas prateleiras de mais de 45.000 lojas em todo o México. Atualmente, os cálculos diários de estoque são realizados por funcionários de vendas de entregas diretas, que devem, sozinhos, prever a necessidade de estoque dos produtos e demanda com base em suas experiências pessoais em cada loja. Como alguns pães têm uma vida útil de uma semana, a margem aceitável para o erro é pequena. Assim, desenvolveremos um algooritmo capaz de prever essa demanda de forma automatizada.</p>
+</div>
+<div id="datasets-utilizados" class="section level2" number="1.3">
+<h2><span class="header-section-number">1.3</span> Datasets utilizados:</h2>
+<p>train_sample5M: Amostra do conjunto com os dados históricos fornecidos. Usaremos uma amostra aleatória com 5 milhões de registros, por limitações de hardware, o que diminuirá a perfomance do modelo preditivo, porém não fará diferença para fins didáticos.</p>
+<p>town_state.csv: Cidade e Estado (ligado ao atributo ‘Agencia_ID’)</p>
+<p>producto_tabla.csv: Nome dos produtos (ligado ao atributo ‘Producto_ID’)</p>
+</div>
+<div id="carregando-pacotes-utilizados-no-projeto" class="section level2" number="1.4">
+<h2><span class="header-section-number">1.4</span> Carregando pacotes utilizados no projeto</h2>
+<pre class="r"><code>library(data.table)
+library(ggplot2)
+library(dplyr)
+library(corrplot)
+library(randomForest)
+library(mltools)
+library(stringr)
+library(xgboost)
+library(caret)
+library(knitr)</code></pre>
+<pre class="r"><code>set.seed(20)</code></pre>
+</div>
+<div id="carregando-dados" class="section level2" number="1.5">
+<h2><span class="header-section-number">1.5</span> Carregando dados</h2>
+<pre class="r"><code>data &lt;- fread(&quot;train_sample5M.csv&quot;, header = T)
+str(data)</code></pre>
+<pre><code>## Classes &#39;data.table&#39; and &#39;data.frame&#39;:   5000000 obs. of  12 variables:
+##  $ V1               : int  1 2 3 4 5 6 7 8 9 10 ...
+##  $ Semana           : int  4 6 5 4 8 8 9 4 5 7 ...
+##  $ Agencia_ID       : int  1449 2019 1419 4010 1378 2016 3212 1315 1216 1437 ...
+##  $ Canal_ID         : int  4 1 1 1 1 1 1 1 1 1 ...
+##  $ Ruta_SAK         : int  4703 2108 2108 1187 1264 1167 1608 1163 2824 1206 ...
+##  $ Cliente_ID       : int  2388554 2259230 1584082 675125 1701297 186427 2464819 2101619 4688752 1486927 ...
+##  $ Producto_ID      : int  43064 31310 30549 43209 2425 41843 35144 1220 43316 43209 ...
+##  $ Venta_uni_hoy    : int  2 1 4 7 20 5 2 2 1 2 ...
+##  $ Venta_hoy        : num  18.54 6.25 21.52 47.32 90 ...
+##  $ Dev_uni_proxima  : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ Dev_proxima      : num  0 0 0 0 0 0 0 0 0 0 ...
+##  $ Demanda_uni_equil: int  2 1 4 7 20 5 2 2 1 2 ...
+##  - attr(*, &quot;.internal.selfref&quot;)=&lt;externalptr&gt;</code></pre>
+<pre class="r"><code>kable(head(data))</code></pre>
+<table>
+<colgroup>
+<col width="2%" />
+<col width="5%" />
+<col width="8%" />
+<col width="6%" />
+<col width="6%" />
+<col width="8%" />
+<col width="9%" />
+<col width="10%" />
+<col width="7%" />
+<col width="12%" />
+<col width="9%" />
+<col width="13%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">V1</th>
+<th align="right">Semana</th>
+<th align="right">Agencia_ID</th>
+<th align="right">Canal_ID</th>
+<th align="right">Ruta_SAK</th>
+<th align="right">Cliente_ID</th>
+<th align="right">Producto_ID</th>
+<th align="right">Venta_uni_hoy</th>
+<th align="right">Venta_hoy</th>
+<th align="right">Dev_uni_proxima</th>
+<th align="right">Dev_proxima</th>
+<th align="right">Demanda_uni_equil</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">1449</td>
+<td align="right">4</td>
+<td align="right">4703</td>
+<td align="right">2388554</td>
+<td align="right">43064</td>
+<td align="right">2</td>
+<td align="right">18.54</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">6</td>
+<td align="right">2019</td>
+<td align="right">1</td>
+<td align="right">2108</td>
+<td align="right">2259230</td>
+<td align="right">31310</td>
+<td align="right">1</td>
+<td align="right">6.25</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">5</td>
+<td align="right">1419</td>
+<td align="right">1</td>
+<td align="right">2108</td>
+<td align="right">1584082</td>
+<td align="right">30549</td>
+<td align="right">4</td>
+<td align="right">21.52</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">4</td>
+<td align="right">4010</td>
+<td align="right">1</td>
+<td align="right">1187</td>
+<td align="right">675125</td>
+<td align="right">43209</td>
+<td align="right">7</td>
+<td align="right">47.32</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">7</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">8</td>
+<td align="right">1378</td>
+<td align="right">1</td>
+<td align="right">1264</td>
+<td align="right">1701297</td>
+<td align="right">2425</td>
+<td align="right">20</td>
+<td align="right">90.00</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">20</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="right">8</td>
+<td align="right">2016</td>
+<td align="right">1</td>
+<td align="right">1167</td>
+<td align="right">186427</td>
+<td align="right">41843</td>
+<td align="right">5</td>
+<td align="right">34.30</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">5</td>
+</tr>
+</tbody>
+</table>
+<p>Verificando se temos valores NA</p>
+<pre class="r"><code>sum(is.na(data))</code></pre>
+<pre><code>## [1] 0</code></pre>
+</div>
+<div id="dicionário-de-dados-e-análise-exploratória-inicial" class="section level2" number="1.6">
+<h2><span class="header-section-number">1.6</span> Dicionário de dados e análise exploratória inicial</h2>
+<div id="demanda_uni_equil-variável-target-o-que-iremos-prever-com-nosso-modelo" class="section level3" number="1.6.1">
+<h3><span class="header-section-number">1.6.1</span> ‘Demanda_uni_equil’: Variável target (o que iremos prever com nosso modelo)</h3>
+<p>Demanda ajustada (número inteiro) : venta_hoy - dev_uni_proxima</p>
+<pre class="r"><code>summary(data$Demanda_uni_equil)</code></pre>
+<pre><code>##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+##    0.000    2.000    3.000    7.222    6.000 4936.000</code></pre>
+</div>
+<div id="semana-número-da-semanade-3-a-9" class="section level3" number="1.6.2">
+<h3><span class="header-section-number">1.6.2</span> ‘Semana’: Número da semana(de 3 a 9)</h3>
+<pre class="r"><code>table(data$Semana) #Quantidade de registros a cada dia da semana</code></pre>
+<pre><code>## 
+##      3      4      5      6      7      8      9 
+## 754207 740865 714316 687199 700390 700731 702292</code></pre>
+<pre class="r"><code>ggplot(data,aes(Semana,Demanda_uni_equil )) + geom_count() #Gráfico com a demanda por dia</code></pre>
+<p><img src="Previsao_demanda_rmarkdown_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Podemos perceber que os dados estão bem distribuídos pela semana. Podemos usar posteriormente uma das semanas como dados de teste e o restante como dados de treino</p>
+</div>
+<div id="agencia_id-id-do-depósito-de-vendas" class="section level3" number="1.6.3">
+<h3><span class="header-section-number">1.6.3</span> ‘Agencia_ID’: ID do depósito de vendas</h3>
+<p>Quantidade de depósitos únicos:</p>
+<pre class="r"><code>length(unique(data$Agencia_ID))</code></pre>
+<pre><code>## [1] 552</code></pre>
+</div>
+<div id="canal_id-id-do-canal-de-vendas" class="section level3" number="1.6.4">
+<h3><span class="header-section-number">1.6.4</span> ‘Canal_ID’: ID do canal de vendas</h3>
+<pre class="r"><code>table(data$Canal_ID)</code></pre>
+<pre><code>## 
+##       1       2       4       5       6       7       8       9      11 
+## 4546902   56282  251864    9723   18993   45176    4579      23   66458</code></pre>
+<pre class="r"><code>ggplot(data,aes(Canal_ID,Demanda_uni_equil )) + geom_count()</code></pre>
+<p><img src="Previsao_demanda_rmarkdown_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>Podemos perceber que os IDs dos canais são: 1,2,4,5,6,7,8 e 11. O canal 1 tendo grande predominância na demanda</p>
+</div>
+<div id="ruta_sak-id-de-rota-várias-rotas-depósito-de-vendas" class="section level3" number="1.6.5">
+<h3><span class="header-section-number">1.6.5</span> ‘Ruta_SAK’: ID de rota (Várias rotas = Depósito de Vendas)</h3>
+<pre class="r"><code>length(unique(data$Ruta_SAK)) #quantidade de rotas</code></pre>
+<pre><code>## [1] 2697</code></pre>
+<p>Rotas mais acessadas:</p>
+<pre class="r"><code>sort(table(data$Ruta_SAK),decreasing = T)[1:5]</code></pre>
+<pre><code>## 
+##  1201  1203  1202  1204  1205 
+## 30917 29526 28953 28274 27773</code></pre>
+</div>
+<div id="cliente_id-id-do-cliente" class="section level3" number="1.6.6">
+<h3><span class="header-section-number">1.6.6</span> ‘Cliente_ID’: ID do cliente</h3>
+<p>Quantidade de clientes únicos:</p>
+<pre class="r"><code>length(unique(data$Cliente_ID))</code></pre>
+<pre><code>## [1] 733552</code></pre>
+</div>
+<div id="producto_id-id-do-produto" class="section level3" number="1.6.7">
+<h3><span class="header-section-number">1.6.7</span> ‘Producto_ID’: ID do produto</h3>
+<p>Quantidade de produtos únicos</p>
+<pre class="r"><code>length(unique(data$Producto_ID))</code></pre>
+<pre><code>## [1] 1521</code></pre>
+</div>
+<div id="venta_uni_hoy-unidades-vendidas-na-semana-número-inteiro" class="section level3" number="1.6.8">
+<h3><span class="header-section-number">1.6.8</span> ‘Venta_uni_hoy’: Unidades vendidas na semana (número inteiro)</h3>
+<pre class="r"><code>summary(data$Venta_uni_hoy)</code></pre>
+<pre><code>##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+##    0.000    2.000    3.000    7.307    7.000 4936.000</code></pre>
+<pre class="r"><code>boxplot(data$Venta_uni_hoy)</code></pre>
+<p><img src="Previsao_demanda_rmarkdown_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p>Parece haver bastante outliers. Trataremos disso depois</p>
+<pre class="r"><code>ggplot(data,aes(Venta_uni_hoy,Demanda_uni_equil )) + geom_count(aes(color = ..n..))</code></pre>
+<p><img src="Previsao_demanda_rmarkdown_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p>Como esperado, grande relação com a variável target.</p>
+</div>
+<div id="venta_hoy-vendas-nesta-semana-undade-pesos" class="section level3" number="1.6.9">
+<h3><span class="header-section-number">1.6.9</span> ‘Venta_hoy’: vendas nesta semana (undade: pesos)</h3>
+<pre class="r"><code>summary(data$Venta_hoy)</code></pre>
+<pre><code>##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+##      0.00     16.76     30.00     68.55     56.10 303851.52</code></pre>
+<pre class="r"><code>ggplot(data,aes(Venta_hoy,Demanda_uni_equil )) + geom_count(aes(color = ..n..))</code></pre>
+<p><img src="Previsao_demanda_rmarkdown_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p>Quanto maior o valor da venda, mais disperso da variável target</p>
+</div>
+<div id="dev_uni_proxima-unidades-devolvidas-na-semana-seguinte-número-inteiro" class="section level3" number="1.6.10">
+<h3><span class="header-section-number">1.6.10</span> ‘Dev_uni_proxima’: Unidades devolvidas na semana seguinte (número inteiro)</h3>
+<pre class="r"><code>summary(data$Dev_uni_proxima)</code></pre>
+<pre><code>##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+##    0.0000    0.0000    0.0000    0.1252    0.0000 1708.0000</code></pre>
+<pre class="r"><code>ggplot(data,aes(Dev_uni_proxima,Demanda_uni_equil )) + geom_count()</code></pre>
+<p><img src="Previsao_demanda_rmarkdown_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+</div>
+<div id="dev_proxima-quantidade-devolvida-na-semana-seguinte-unidade-pesos" class="section level3" number="1.6.11">
+<h3><span class="header-section-number">1.6.11</span> ‘Dev_proxima’: quantidade devolvida na semana seguinte (unidade: pesos)</h3>
+<pre class="r"><code>summary(data$Dev_proxima)</code></pre>
+<pre><code>##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+##     0.00     0.00     0.00     1.24     0.00 40093.20</code></pre>
+<pre class="r"><code>ggplot(data,aes(Venta_hoy,Demanda_uni_equil )) + geom_count(aes(color = ..n..))</code></pre>
+<p><img src="Previsao_demanda_rmarkdown_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p><br/><br/></p>
+<hr />
+<p><br/><br/></p>
+</div>
+</div>
+</div>
+<div id="data-munging-adicionando-novas-variávies-ao-dataset-e-fazedo-modificações" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Data munging: Adicionando Novas variávies ao dataset e fazedo modificações</h1>
+<div id="excluindo-a-coluna-v1" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Excluindo a coluna V1</h2>
+<pre class="r"><code>data$V1 = NULL</code></pre>
+</div>
+<div id="adicionando-dados-dos-locais-de-vendas-com-o-arquivo-town_state.csv" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Adicionando dados dos locais de vendas com o arquivo “town_state.csv”</h2>
+<pre class="r"><code>state &lt;- read.csv(&quot;town_state.csv&quot;, header = T,encoding = &quot;UTF-8&quot;)
+kable(head(state))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Agencia_ID</th>
+<th align="left">Town</th>
+<th align="left">State</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1110</td>
+<td align="left">2008 AG. LAGO FILT</td>
+<td align="left">MÉXICO, D.F.</td>
+</tr>
+<tr class="even">
+<td align="right">1111</td>
+<td align="left">2002 AG. AZCAPOTZALCO</td>
+<td align="left">MÉXICO, D.F.</td>
+</tr>
+<tr class="odd">
+<td align="right">1112</td>
+<td align="left">2004 AG. CUAUTITLAN</td>
+<td align="left">ESTADO DE MÉXICO</td>
+</tr>
+<tr class="even">
+<td align="right">1113</td>
+<td align="left">2008 AG. LAGO FILT</td>
+<td align="left">MÉXICO, D.F.</td>
+</tr>
+<tr class="odd">
+<td align="right">1114</td>
+<td align="left">2029 AG.IZTAPALAPA 2</td>
+<td align="left">MÉXICO, D.F.</td>
+</tr>
+<tr class="even">
+<td align="right">1116</td>
+<td align="left">2011 AG. SAN ANTONIO</td>
+<td align="left">MÉXICO, D.F.</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>data &lt;-inner_join(data, state, by=&quot;Agencia_ID&quot;)</code></pre>
+</div>
+<div id="dividindo-a-coluna-town-em-town_id-e-town_name" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Dividindo a coluna ‘Town’ em ‘Town_ID’ e ‘Town_name’</h2>
+<pre class="r"><code>data$Town_ID &lt;- sapply(strsplit(data$Town, &quot; &quot;), function(x) x[[1]])
+data$Town_ID &lt;- as.integer(data$Town_ID)
+data$Town_name &lt;- gsub(&quot;\\d+&quot;,&quot;&quot;,data$Town)
+data$Town = NULL
+kable(head(data[,c(&#39;Town_name&#39;,&#39;State&#39;)]))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Town_name</th>
+<th align="left">State</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">PIEDRAS NEGRAS</td>
+<td align="left">COAHUILA</td>
+</tr>
+<tr class="even">
+<td align="left">IGUALA</td>
+<td align="left">GUERRERO</td>
+</tr>
+<tr class="odd">
+<td align="left">LINCOLN</td>
+<td align="left">NUEVO LEÓN</td>
+</tr>
+<tr class="even">
+<td align="left">AEROPUERTO</td>
+<td align="left">NUEVO LEÓN</td>
+</tr>
+<tr class="odd">
+<td align="left">SANTIAGO IXCUINTLA</td>
+<td align="left">NAYARIT</td>
+</tr>
+<tr class="even">
+<td align="left">CUAUTLA</td>
+<td align="left">MORELOS</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="criando-coluna-state_encoded" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> Criando coluna ‘State_encoded’</h2>
+<p>Utilizarei label encoder para transformar strings em números. Isso será útil no nosso modelo de machine learning</p>
+<pre class="r"><code>data$State_encoded &lt;-factor(data$State) 
+data$State_encoded &lt;-as.integer(data$State_encoded)
+kable(head(data[,c(&#39;State&#39;,&#39;State_encoded&#39;)]))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">State</th>
+<th align="right">State_encoded</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">COAHUILA</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="left">GUERRERO</td>
+<td align="right">12</td>
+</tr>
+<tr class="odd">
+<td align="left">NUEVO LEÓN</td>
+<td align="right">19</td>
+</tr>
+<tr class="even">
+<td align="left">NUEVO LEÓN</td>
+<td align="right">19</td>
+</tr>
+<tr class="odd">
+<td align="left">NAYARIT</td>
+<td align="right">18</td>
+</tr>
+<tr class="even">
+<td align="left">MORELOS</td>
+<td align="right">17</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="adicionando-informações-do-produto-com-o-arquivo-producto_tabla.csv" class="section level2" number="2.5">
+<h2><span class="header-section-number">2.5</span> Adicionando informações do produto com o arquivo “producto_tabla.csv”</h2>
+<pre class="r"><code>product &lt;- read.csv(&quot;producto_tabla.csv&quot;, header = T, encoding = &quot;UTF-8&quot;)
+data &lt;-inner_join(data, product, by=&quot;Producto_ID&quot;)
+str(data$NombreProducto)</code></pre>
+<pre><code>##  chr [1:5000000] &quot;Submarinos Fresa 3p 105g SP MTA MLA 43064&quot; ...</code></pre>
+<pre class="r"><code>kable(as.data.frame(head(data$NombreProducto)))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">head(data$NombreProducto)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Submarinos Fresa 3p 105g SP MTA MLA 43064</td>
+</tr>
+<tr class="even">
+<td align="left">Canelitas 90g MTB MLA 31310</td>
+</tr>
+<tr class="odd">
+<td align="left">Suavicremas Chocolate 84g MTA MLA 30549</td>
+</tr>
+<tr class="even">
+<td align="left">Bimbunuelos 4p 66g MTA BIM 43209</td>
+</tr>
+<tr class="odd">
+<td align="left">Nito 1p 62g Central BIM 2425</td>
+</tr>
+<tr class="even">
+<td align="left">Leche Nito 236ml BIM 41843</td>
+</tr>
+</tbody>
+</table>
+<p>Da coluna ‘NombreProducto’ vamos separar as informações do peso e da quantidade de pedaços.</p>
+</div>
+<div id="criando-coluna-weight-peso-do-produto" class="section level2" number="2.6">
+<h2><span class="header-section-number">2.6</span> Criando coluna Weight (peso do produto)</h2>
+<pre class="r"><code>data$Weight &lt;- regmatches(data$NombreProducto, regexec(&quot;\\d+g&quot;, data$NombreProducto))
+data$Weight &lt;- unlist({data$Weight[sapply(data$Weight, length)==0] &lt;- NA; data$Weight})
+data$Weight &lt;- as.numeric(strsplit(as.character(data$Weight), &quot;\\D&quot;))</code></pre>
+</div>
+<div id="tratando-de-valores-na---substituindo-pela-mediana" class="section level2" number="2.7">
+<h2><span class="header-section-number">2.7</span> Tratando de valores NA - substituindo pela mediana</h2>
+<p>Usarei a mediana, e não a média, para evitar a interferência de outliers</p>
+<pre class="r"><code>median(data$Weight, na.rm = T)</code></pre>
+<pre><code>## [1] 120</code></pre>
+<pre class="r"><code>data$Weight &lt;- ifelse(is.na(data$Weight), median(data$Weight, na.rm = T),
+                      data$Weight)
+kable(as.data.frame(head(data$Weight)))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">head(data$Weight)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">105</td>
+</tr>
+<tr class="even">
+<td align="right">90</td>
+</tr>
+<tr class="odd">
+<td align="right">84</td>
+</tr>
+<tr class="even">
+<td align="right">66</td>
+</tr>
+<tr class="odd">
+<td align="right">62</td>
+</tr>
+<tr class="even">
+<td align="right">120</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="adicionando-coluna-piecesquantidade-de-pedaços" class="section level2" number="2.8">
+<h2><span class="header-section-number">2.8</span> Adicionando coluna ‘Pieces’(quantidade de pedaços)</h2>
+<pre class="r"><code>data$Pieces &lt;- regmatches(data$NombreProducto, regexec(&quot;\\d+p&quot;, data$NombreProducto))
+data$Pieces &lt;- unlist({data$Pieces[sapply(data$Pieces, length)==0] &lt;- NA; data$Pieces})
+data$Pieces &lt;- as.numeric(strsplit(as.character(data$Pieces), &quot;\\D&quot;))</code></pre>
+</div>
+<div id="tratando-de-valores-na---substituindo-na-por-1" class="section level2" number="2.9">
+<h2><span class="header-section-number">2.9</span> Tratando de valores NA - substituindo NA por 1</h2>
+<p>Considerarei os produtos sem informação de número de pedaços como sendo uma peça única</p>
+<pre class="r"><code>data$Pieces &lt;- ifelse(is.na(data$Pieces), 1,data$Pieces)
+kable(as.data.frame(head(data$Piece)))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">head(data$Piece)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="deixando-apenas-o-nome-do-produto-na-coluna-nombreproducto" class="section level2" number="2.10">
+<h2><span class="header-section-number">2.10</span> Deixando apenas o nome do produto na coluna ‘NombreProducto’</h2>
+<pre class="r"><code>data$NombreProducto &lt;- str_extract(data$NombreProducto, &quot;[A-z ]+&quot;)
+kable(as.data.frame(head(data$NombreProducto)))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">head(data$NombreProducto)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Submarinos Fresa</td>
+</tr>
+<tr class="even">
+<td align="left">Canelitas</td>
+</tr>
+<tr class="odd">
+<td align="left">Suavicremas Chocolate</td>
+</tr>
+<tr class="even">
+<td align="left">Bimbunuelos</td>
+</tr>
+<tr class="odd">
+<td align="left">Nito</td>
+</tr>
+<tr class="even">
+<td align="left">Leche Nito</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="criando-coluna-product_lw_mean-e-product_lw_median" class="section level2" number="2.11">
+<h2><span class="header-section-number">2.11</span> criando coluna Product_lw_mean e Product_lw_median</h2>
+<p>mostra a média e mediana da demanda de determinado produto na semana anterior Usamos tanto média quanto mediana para posteriormente testarmos a que se encaixa melhor no modelo de machine learning</p>
+<pre class="r"><code>mean_y &lt;- setNames(data.frame(matrix(ncol = 4, nrow = 0)), c(&quot;Producto_ID&quot;, &quot;Demanda_uni_equil_mean&quot;,&quot;Demanda_uni_equil_median&quot; ,&quot;Semana&quot;))
+for (i in 3:9) {
+  mean_x = subset(data, select = c(Semana, Producto_ID, Demanda_uni_equil), subset =  data$Semana == i)
+  mean_x = mean_x %&gt;% group_by (Producto_ID)  %&gt;% summarise(across(Demanda_uni_equil, list(mean = mean, median = median)))
+  mean_x$Semana = as.integer(i+1)
+  mean_y &lt;- rbind(mean_y, mean_x)
+}
+
+data = left_join(data, mean_y,by = c(&#39;Semana&#39;, &#39;Producto_ID&#39;))
+
+colnames(data)[which(names(data) == &quot;Demanda_uni_equil_mean&quot;)] &lt;- &quot;Product_lw_mean&quot;
+colnames(data)[which(names(data) == &quot;Demanda_uni_equil_median&quot;)] &lt;- &quot;Product_lw_median&quot;
+kable(head(data[,c(&quot;Product_lw_mean&quot;,&quot;Product_lw_median&quot;)]))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Product_lw_mean</th>
+<th align="right">Product_lw_median</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">2.489471</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">5.793099</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="right">3.542001</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="right">4.855303</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="right">26.966325</td>
+<td align="right">20</td>
+</tr>
+<tr class="even">
+<td align="right">6.578608</td>
+<td align="right">5</td>
+</tr>
+</tbody>
+</table>
+<p>Existem valores NA na semana 3, pois não temos os valores da semana 2. Poderemos remover dos dados de treino posteriormente</p>
+</div>
+<div id="criando-coluna-last_week_mean-e-last_week_median" class="section level2" number="2.12">
+<h2><span class="header-section-number">2.12</span> criando coluna last_week_mean e last_week_median</h2>
+<p>mostra a média e mediana da demanda total na semana anterior</p>
+<pre class="r"><code>mean_z &lt;- setNames(data.frame(matrix(ncol = 3, nrow = 0)), c(&quot;Demanda_uni_equil_mean&quot;,&quot;Demanda_uni_equil_median&quot; ,&quot;Semana&quot;))
+for (i in 3:9) {
+  mean_w = subset(data, select = c(Semana, Demanda_uni_equil), subset =  data$Semana == i)
+  mean_w = mean_w %&gt;% summarise(across(Demanda_uni_equil, list(mean = mean, median = median)))
+  mean_w$Semana = as.integer(i+1)
+  mean_z &lt;- rbind(mean_z, mean_w)
+}</code></pre>
+<p>A mediana de todas as semanas foi a mesma(3), logo não colocaremos essa informação no dataset</p>
+<pre class="r"><code>data = left_join(data, mean_z,by = &#39;Semana&#39;)
+data$Demanda_uni_equil_median = NULL
+
+colnames(data)[which(names(data) == &quot;Demanda_uni_equil_mean&quot;)] &lt;- &quot;last_week_mean&quot;
+kable(as.data.frame(head(data$last_week_mean)))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">head(data$last_week_mean)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">6.980342</td>
+</tr>
+<tr class="even">
+<td align="right">7.331078</td>
+</tr>
+<tr class="odd">
+<td align="right">7.215134</td>
+</tr>
+<tr class="even">
+<td align="right">6.980342</td>
+</tr>
+<tr class="odd">
+<td align="right">7.358920</td>
+</tr>
+<tr class="even">
+<td align="right">7.358920</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="novas-variáveis-town_demand_median-town_demand_mean-e-state_demand_medianstate_demand_mean" class="section level2" number="2.13">
+<h2><span class="header-section-number">2.13</span> Novas variáveis: Town_demand_median/ Town_demand_mean e State_demand_median/State_demand_mean:</h2>
+<p>Mostra a média e mediana da demanda por cidade e por estado</p>
+<pre class="r"><code>mean_a = subset(data, select = c(Town_ID, Demanda_uni_equil))
+mean_a = mean_a %&gt;% group_by (Town_ID) %&gt;% summarise(across(Demanda_uni_equil, list(mean = mean, median = median)))
+
+mean_b = subset(data, select = c(State, Demanda_uni_equil))
+mean_b = mean_b %&gt;% group_by (State) %&gt;% summarise(across(Demanda_uni_equil, list(mean = mean, median = median)))
+
+
+data = left_join(data, mean_a,by = &#39;Town_ID&#39;)
+colnames(data)[which(names(data) == &quot;Demanda_uni_equil_mean&quot;)] &lt;- &quot;Town_demand_mean&quot;
+colnames(data)[which(names(data) == &quot;Demanda_uni_equil_median&quot;)] &lt;- &quot;Town_demand_median&quot;
+data = left_join(data, mean_b,by = &#39;State&#39;)
+colnames(data)[which(names(data) == &quot;Demanda_uni_equil_mean&quot;)] &lt;- &quot;State_demand_mean&quot;
+colnames(data)[which(names(data) == &quot;Demanda_uni_equil_median&quot;)] &lt;- &quot;State_demand_median&quot;
+kable(head(data[,c(&quot;State_demand_mean&quot;,&quot;State_demand_median&quot;)]))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">State_demand_mean</th>
+<th align="right">State_demand_median</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">7.944021</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="right">7.070536</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="right">8.346311</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="right">8.346311</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="right">6.947406</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="right">5.788210</td>
+<td align="right">3</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="novas-variáveis-agencia_per_town-e-agencia_per_state" class="section level2" number="2.14">
+<h2><span class="header-section-number">2.14</span> Novas variáveis: Agencia_per_town e Agencia_per_state</h2>
+<p>Mostra a quantidade de Agências por cidade e quantidade por Estado</p>
+<pre class="r"><code>mean_c = subset(data, select = c(Town_ID, Agencia_ID))
+mean_c = mean_c %&gt;% group_by(Town_ID) %&gt;% summarise(Agencia_per_town = n_distinct(Agencia_ID))
+
+mean_d = subset(data, select = c(State_encoded, Agencia_ID))
+mean_d = mean_d %&gt;% group_by(State_encoded) %&gt;% summarise(Agencia_per_state = n_distinct(Agencia_ID))
+
+
+data = left_join(data, mean_c, by = &#39;Town_ID&#39;)
+data = left_join(data, mean_d,by = &#39;State_encoded&#39;)
+
+head(data[,c(&quot;Agencia_per_town&quot;,&quot;Agencia_per_state&quot;)])</code></pre>
+<pre><code>##    Agencia_per_town Agencia_per_state
+## 1:                3                22
+## 2:                1                14
+## 3:                2                23
+## 4:                2                23
+## 5:                1                 6
+## 6:                3                10</code></pre>
+<p><br/><br/></p>
+<hr />
+<p><br/><br/></p>
+</div>
+</div>
+<div id="análise-dos-dados" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Análise dos dados</h1>
+<div id="análise-venda-e-devolução-de-produtos" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Análise: Venda e devolução de produtos</h2>
+</div>
+<div id="top-10-produtos-mais-vendidos-e-produtos-mais-devolvidos" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Top 10 produtos mais vendidos e produtos mais devolvidos</h2>
+<pre class="r"><code>product_sell &lt;- data %&gt;% select(NombreProducto,Venta_uni_hoy) %&gt;% group_by(NombreProducto) %&gt;% summarise(units_sold = sum(Venta_uni_hoy)) %&gt;% arrange(desc(units_sold))
+
+
+product_sell &lt;- product_sell[1:10,]
+
+product_dev &lt;- data %&gt;% select(NombreProducto,Dev_uni_proxima) %&gt;% group_by(NombreProducto) %&gt;% 
+  summarise(units_back = sum(Dev_uni_proxima)) %&gt;% arrange(desc(units_back)) 
+product_dev &lt;- product_dev[1:10,]
+
+
+plot_1 = ggplot(product_sell, aes(x = reorder(NombreProducto, units_sold),units_sold))+
+  geom_bar(stat = &quot;identity&quot;, fill = &quot;seagreen2&quot;)+
+  coord_flip()+
+  theme_minimal()+
+  labs(title = &quot;Produtos mais vendidos&quot;, 
+       y = &quot;Unidades Vendidas&quot;,
+       x = &quot;Produto&quot;)  
+
+
+plot_2 = ggplot(product_dev, aes(x = reorder(NombreProducto, units_back),units_back))+
+  geom_bar(stat = &quot;identity&quot;, fill = &quot;turquoise1&quot;)+
+  coord_flip()+
+  theme_minimal()+
+  labs(title = &quot;Produtos mais devolvidos&quot;, 
+       y = &quot;Unidades devolvidas&quot;,
+       x = &quot;Produto&quot;)  
+
+gridExtra::grid.arrange(plot_1,plot_2)</code></pre>
+<p><img src="Previsao_demanda_rmarkdown_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
+<p>Com esses gráficos conseguimos identificar claramente quais são os produtos mais vendidos e quais os mais devolvidos.<br />
+Podemos ver uma discrepância entre os produtos mais vendidos aos locais de venda e os produtos mais devolvidos</p>
+</div>
+<div id="top-10-produtos-com-maior-demanda-real" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Top 10 produtos com maior demanda real</h2>
+<pre class="r"><code>product_demand &lt;- data %&gt;% select(NombreProducto,Demanda_uni_equil) %&gt;% group_by(NombreProducto) %&gt;% 
+  summarise(units_demand = sum(Demanda_uni_equil)) %&gt;% arrange(desc(units_demand)) 
+product_demand &lt;- product_demand[1:10,] 
+
+plot_3 = ggplot(product_demand, aes(x = reorder(NombreProducto, units_demand),units_demand))+
+  geom_bar(stat = &quot;identity&quot;, fill = &quot;grey82&quot;)+
+  coord_flip()+
+  theme_minimal()+
+  labs(title = &quot;Produtos com maior demanda&quot;, 
+       y = &quot;Demanda&quot;,
+       x = &quot;Produto&quot;)
+gridExtra::grid.arrange(plot_3,plot_1)</code></pre>
+<p><img src="Previsao_demanda_rmarkdown_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
+<p>São os mesmos 10 produtos mais vendidoos, com valores bem próximos</p>
+</div>
+<div id="relação-entre-devolução-e-peso-do-produto" class="section level2" number="3.4">
+<h2><span class="header-section-number">3.4</span> Relação entre devolução e peso do produto</h2>
+<pre class="r"><code>product_dev2 &lt;- data %&gt;% select(NombreProducto,Dev_uni_proxima, Weight) %&gt;% group_by(NombreProducto) %&gt;% 
+  mutate(units_back = sum(Dev_uni_proxima)) %&gt;% distinct(NombreProducto,Weight,units_back) %&gt;% 
+  arrange(desc(units_back)) 
+
+ggplot(product_dev2, aes(x = Weight, y = units_back))+
+  geom_point(colour = &quot;skyblue4&quot;, alpha = 0.6, size = 4)+
+  theme_minimal()+
+  labs(title = &quot;Análise de correlação - Peso do produto x Unidades Devolvidas&quot;,
+       y = &quot;Unidades devolvidas&quot;,
+       x = &quot;peso&quot;)</code></pre>
+<p><img src="Previsao_demanda_rmarkdown_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+<p>Não parece haver relação do peso com unidades devolvidas</p>
+</div>
+<div id="quantidade-de-devoluções-por-cidade-e-por-estado" class="section level2" number="3.5">
+<h2><span class="header-section-number">3.5</span> Quantidade de devoluções por cidade e por Estado</h2>
+</div>
+<div id="top-10-cidadesestados-com-mais-vendas-e-mais-devoluções" class="section level2" number="3.6">
+<h2><span class="header-section-number">3.6</span> Top 10 cidades/Estados com mais vendas e mais devoluções</h2>
+<pre class="r"><code>town_sell &lt;- data %&gt;% select(Town_name,Venta_uni_hoy) %&gt;% group_by(Town_name) %&gt;% 
+  summarise(units_sold = sum(Venta_uni_hoy)) %&gt;% arrange(desc(units_sold)) 
+town_sell &lt;- town_sell[1:10,]
+
+Town_dev &lt;- data %&gt;% select(Town_name,Dev_uni_proxima) %&gt;% group_by(Town_name) %&gt;% 
+  summarise(units_back = sum(Dev_uni_proxima)) %&gt;% arrange(desc(units_back)) 
+Town_dev &lt;- Town_dev[1:10,]
+
+
+plot_4 = ggplot(town_sell, aes(x = reorder(Town_name, units_sold),units_sold))+
+  geom_bar(stat = &quot;identity&quot;, fill = &quot;royalblue4&quot;)+
+  coord_flip()+
+  theme_minimal()+
+  labs(title = &quot;Cidades: maior venda&quot;, 
+       y = &quot;Unidades Vendidas&quot;,
+       x = &quot;Cidade&quot;)  
+
+
+plot_5 = ggplot(Town_dev, aes(x = reorder(Town_name, units_back),units_back))+
+  geom_bar(stat = &quot;identity&quot;, fill = &quot;royalblue1&quot;)+
+  coord_flip()+
+  theme_minimal()+
+  labs(title = &quot;maior devolução&quot;, 
+       y = &quot;Unidades devolvidas&quot;,
+       x = &quot;Cidade&quot;)  
+
+state_sell &lt;- data %&gt;% select(State,Venta_uni_hoy) %&gt;% group_by(State) %&gt;% 
+  summarise(units_sold = sum(Venta_uni_hoy)) %&gt;% arrange(desc(units_sold)) 
+state_sell &lt;- state_sell[1:10,]
+
+state_dev &lt;- data %&gt;% select(State,Dev_uni_proxima) %&gt;% group_by(State) %&gt;% 
+  summarise(units_back = sum(Dev_uni_proxima)) %&gt;% arrange(desc(units_back)) 
+state_dev &lt;- state_dev[1:10,]
+
+
+plot_6 = ggplot(state_sell, aes(x = reorder(State, units_sold),units_sold))+
+  geom_bar(stat = &quot;identity&quot;, fill = &quot;red4&quot;)+
+  coord_flip()+
+  theme_minimal()+
+  labs(title = &quot;Estados: maior venda&quot;, 
+       y = &quot;Unidades Vendidas&quot;,
+       x = &quot;Estado&quot;)  
+
+
+plot_7 = ggplot(state_dev, aes(x = reorder(State, units_back),units_back))+
+  geom_bar(stat = &quot;identity&quot;, fill = &quot;red1&quot;)+
+  coord_flip()+
+  theme_minimal()+
+  labs(title = &quot;maior devolução&quot;, 
+       y = &quot;Unidades devolvidas&quot;,
+       x = &quot;Estado&quot;)  
+
+gridExtra::grid.arrange(plot_4,plot_5,plot_6,plot_7)</code></pre>
+<p><img src="Previsao_demanda_rmarkdown_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
+</div>
+<div id="preço-do-produto-x-devolução" class="section level2" number="3.7">
+<h2><span class="header-section-number">3.7</span> Preço do produto x devolução</h2>
+<pre class="r"><code>product_dev3 &lt;- data %&gt;% select(NombreProducto,Dev_uni_proxima, Dev_proxima) %&gt;% filter(Dev_uni_proxima&gt;0) %&gt;%
+  group_by(NombreProducto) %&gt;% mutate(dev_uni_product =mean(Dev_uni_proxima),price_product = mean(Dev_proxima/Dev_uni_proxima)) %&gt;%
+  distinct(NombreProducto,dev_uni_product,price_product)
+
+
+
+ggplot(product_dev3, aes(x = dev_uni_product, y = price_product))+
+  geom_point(colour = &quot;skyblue4&quot;, alpha = 0.6, size = 4)+
+  theme_minimal()+
+  labs(title = &quot;Análise de correlação - Preço do produto x Unidades Devolvidas&quot;,
+       y = &quot;valor de um produto devolvido&quot;,
+       x = &quot;unidades devolvidas&quot;)</code></pre>
+<p><img src="Previsao_demanda_rmarkdown_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
+<p>Podemos verificar que não há correlação entre o preço de um produto e a quantidade de devoluções deste</p>
+</div>
+<div id="verificando-os-produtos-mais-devolvidos-e-os-mais-caros" class="section level2" number="3.8">
+<h2><span class="header-section-number">3.8</span> Verificando os produtos mais devolvidos e os mais caros</h2>
+<pre class="r"><code>dev_prod = product_dev3 %&gt;% arrange(desc(dev_uni_product)) 
+dev_prod = dev_prod[1:15,]
+price_prod = product_dev3 %&gt;% arrange(desc(price_product)) 
+price_prod = price_prod[1:15,]
+
+
+
+plot_8 = ggplot(dev_prod, aes(x = reorder(NombreProducto, dev_uni_product),dev_uni_product))+
+  geom_bar(stat = &quot;identity&quot;, fill = &quot;seagreen2&quot;)+
+  coord_flip()+
+  theme_minimal()+
+  labs(title = &quot;Produtos com maior média de devoluções&quot;, 
+       y = &quot;Média de devoluções&quot;,
+       x = &quot;Produto&quot;)  
+
+
+plot_9 = ggplot(price_prod, aes(x = reorder(NombreProducto, price_product),price_product))+
+  geom_bar(stat = &quot;identity&quot;, fill = &quot;turquoise1&quot;)+
+  coord_flip()+
+  theme_minimal()+
+  labs(title = &quot;Produtos mais caros&quot;, 
+       y = &quot;Preço&quot;,
+       x = &quot;Produto&quot;)  
+
+gridExtra::grid.arrange(plot_8,plot_9)</code></pre>
+<p><img src="Previsao_demanda_rmarkdown_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
+<p><br/><br/></p>
+<hr />
+<p><br/><br/></p>
+</div>
+</div>
+<div id="machine-learning-arrumando-os-dados-e-construindo-modelo-usando-o-xboost" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Machine learning: Arrumando os dados e construindo modelo usando o Xboost</h1>
+<div id="análise-de-outliers" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> Análise de outliers</h2>
+<pre class="r"><code>summary(data$Venta_uni_hoy)</code></pre>
+<pre><code>##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+##    0.000    2.000    3.000    7.307    7.000 4936.000</code></pre>
+<pre class="r"><code>summary(data$Venta_hoy)</code></pre>
+<pre><code>##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+##      0.00     16.76     30.00     68.55     56.10 303851.52</code></pre>
+<pre class="r"><code>summary(data$Dev_uni_proxima)</code></pre>
+<pre><code>##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+##    0.0000    0.0000    0.0000    0.1252    0.0000 1708.0000</code></pre>
+<pre class="r"><code>summary(data$Dev_proxima)</code></pre>
+<pre><code>##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+##     0.00     0.00     0.00     1.24     0.00 40093.20</code></pre>
+<div id="identificando-outlier---percentil99" class="section level3" number="4.1.1">
+<h3><span class="header-section-number">4.1.1</span> Identificando outlier - percentil:99%</h3>
+<pre class="r"><code>out_venta = quantile(data$Venta_uni_hoy, 0.99)
+out_venta</code></pre>
+<pre><code>## 99% 
+##  65</code></pre>
+<pre class="r"><code>out_venta_peso = quantile(data$Venta_hoy, 0.99)
+out_venta_peso                     </code></pre>
+<pre><code>##    99% 
+## 650.72</code></pre>
+<pre class="r"><code>out_dev = quantile(data$Dev_uni_proxima, 0.99)
+out_dev</code></pre>
+<pre><code>## 99% 
+##   3</code></pre>
+<pre class="r"><code>out_dev_peso = quantile(data$Dev_proxima, 0.99)
+out_dev_peso</code></pre>
+<pre><code>##   99% 
+## 25.14</code></pre>
+</div>
+<div id="removendo-os-outliers" class="section level3" number="4.1.2">
+<h3><span class="header-section-number">4.1.2</span> Removendo os outliers</h3>
+<pre class="r"><code>data = subset(data, subset = data$Venta_uni_hoy &lt;= out_venta &amp; 
+                data$Venta_hoy &lt;= out_venta_peso &amp;
+                data$Dev_uni_proxima&lt;= out_dev &amp; 
+                data$Dev_proxima &lt;=out_dev_peso )</code></pre>
+<p>Retirarei as variáveis Venta_uni_hoy, Venta_hoy, Dev_uni_proxima e Dev_proxima, pois não aparecem nos dados de teste, por serem dados preditores<br />
+Também retirarei as variáveis representadas por characteres(State, Town_name e NombreProducto) . Podemos fazer isso pois já fizemos o encoder delas anteriormente.</p>
+<pre class="r"><code>data_ml &lt;- subset(data, select=-c(Venta_uni_hoy,Venta_hoy,Dev_uni_proxima,Dev_proxima,State,NombreProducto, Town_name))</code></pre>
+<div id="retiraremos-os-valores-na-presentes-nas-linhas-cuja-semana-é-3.-podemos-voltar-com-essas-linhas-caso-as-variáveis-que-possuam-os-valores-na-sejam-retiradas-do-modelo" class="section level5" number="4.1.2.0.1">
+<h5><span class="header-section-number">4.1.2.0.1</span> Retiraremos os valores NA presentes nas linhas cuja semana é 3. Podemos voltar com essas linhas caso as variáveis que possuam os valores NA sejam retiradas do modelo</h5>
+<pre class="r"><code>data_ml2 &lt;- data_ml %&gt;% na.omit()</code></pre>
+</div>
+</div>
+</div>
+<div id="feature-selection" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> Feature selection</h2>
+<p>Para determinar as variáveis que entrarão no modelo, usaremos análise de correlação e ramdom forest.</p>
+<div id="analisando-a-correlação-entre-variáveis" class="section level3" number="4.2.1">
+<h3><span class="header-section-number">4.2.1</span> Analisando a correlação entre variáveis</h3>
+<pre class="r"><code>correlations &lt;-round(cor(data_ml2), 2)</code></pre>
+<pre class="r"><code>corrplot(correlations, type = &quot;upper&quot;, order = &quot;hclust&quot;,tl.col = &quot;black&quot;, tl.srt = 45)</code></pre>
+<p><img src="Previsao_demanda_rmarkdown_files/figure-html/unnamed-chunk-45-1.png" width="672" /></p>
+<p>Como previsto, as variáveis que possuem média e mediana de um mesmo fator possuem alta correlação. Outra forte correlação ficou entre a variável Agencia_per_state e Town_ID. Poderemos considerar remover uma dessas variáveis do modelo</p>
+</div>
+<div id="analisando-a-importância-de-variáveis-para-o-modelo-com-rmadom-forest" class="section level3" number="4.2.2">
+<h3><span class="header-section-number">4.2.2</span> Analisando a importância de variáveis para o modelo com rmadom forest</h3>
+<p>Não executarei este comando aqui por limitações de hardware, porém o código foi executado e o resultado descrevo abaixo <br/><br/></p>
+<p>model &lt;- randomForest(Demanda_uni_equil ~ ., data = data_ml2, ntree = 40, nodesize = 5, importance=T) <br/><br/> varImpPlot(model) <br/><br/></p>
+<p>Usando o método ‘%inc MSE’, a variável ‘last_week_mean’ possuiu pouca importância no modelo, então tiraremos do nosso dataset.<br />
+Das variáveis que apresentam valores de média e mediana, as médias performaram melhor no modelo, então tiraremos as medianas.<br />
+Testarei o modelo com e sem a variável ‘Town_ID’, por us agrnade correlação com a variável ‘Agencia_per_state’.<br />
+Interessante perceber a grande importância de variáveis criadas como ‘Product_lw_mean’ e ‘Weight’.</p>
+<pre class="r"><code>data_ml3 &lt;- subset(data_ml2, select = -c(State_demand_median,Town_demand_median,Product_lw_median, last_week_mean,Town_ID ))</code></pre>
+</div>
+</div>
+<div id="normalizando-os-dados-preditores" class="section level2" number="4.3">
+<h2><span class="header-section-number">4.3</span> Normalizando os dados preditores</h2>
+<div id="criando-um-função-de-normalização" class="section level4" number="4.3.0.1">
+<h4><span class="header-section-number">4.3.0.1</span> Criando um função de normalização</h4>
+<pre class="r"><code>normalizar &lt;- function(x) {
+  return ((x - min(x)) / (max(x) - min(x)))
+}
+data_ml4 &lt;- as.data.frame(normalizar(data_ml3))
+data_ml4$Demanda_uni_equil &lt;-  data_ml3$Demanda_uni_equil
+data_ml4$Semana &lt;-  data_ml3$Semana</code></pre>
+</div>
+</div>
+<div id="dividindo-os-dados-em-treino-e-teste" class="section level2" number="4.4">
+<h2><span class="header-section-number">4.4</span> Dividindo os dados em treino e teste</h2>
+<p>usaremos as semanas 4 : 8 para dados de treino e a semana 9 para dados de teste</p>
+<pre class="r"><code>data_train = subset(data_ml4, subset = Semana != 9)
+data_test = subset(data_ml4, subset = Semana == 9)
+data_train$Semana = NULL
+data_test$Semana = NULL</code></pre>
+</div>
+<div id="construção-do-modelo-usando-xgboost" class="section level2" number="4.5">
+<h2><span class="header-section-number">4.5</span> Construção do modelo usando XGboost</h2>
+<div id="função-para-descobrir-os-melhores-parâmetros-para-o-modelo" class="section level3" number="4.5.1">
+<h3><span class="header-section-number">4.5.1</span> Função para descobrir os melhores parâmetros para o modelo</h3>
+<pre class="r"><code>model_parameters &lt;- function(data, label, maxDepth = 13, nEta = 0.2, nRounds = 86,  subsample = 0.85, 
+                             colsample = 0.7, statusPrint = F) {
+  #criação de um data frame vazio onde colocaremos os resultados 
+  features = data.frame()
+  count = 0
+  #função para calcular o total de modelos a serem criados
+  total_models &lt;- length(maxDepth) * length(nEta) * length(nRounds) * length(subsample) * length(colsample)
+  #convertendo os dados par uma matrix densa
+  dTrain &lt;- xgb.DMatrix(data  = data, label = label)
+  for(a in maxDepth) {
+    for(b in nEta) {
+      for(c in nRounds) {
+        for(d in subsample) {
+          for(e in colsample) {
+            #criação do modelo
+            model &lt;-  xgb.train(params = list(objective = &quot;reg:linear&quot;, booster= &quot;gbtree&quot;,
+                                              eta = b, max_depth = a, subsample = d,
+                                              colsample_bytree = e),
+                                data = dTrain, feval = rmsle,  nrounds = c,
+                                verbose = F, maximize = F, nthread =15)
+            #salvando as previsões
+            pred &lt;- ifelse(predict(model, data) &lt;0,0,predict(model, data)) #não podemos prever demanda inferior a 0
+            #armazenando os parâmetros e o score do modelo
+            features &lt;- rbind(features, data.frame(maxDepth = a, 
+                                                   eta      = b,
+                                                   nRounds  = c,
+                                                   d        = d,
+                                                   e        = e, 
+                                                   rmsle    = rmsle(label, pred)))
+            count = count + 1
+            #imprimindo a porcetagem de progresso do treinamento e o melhor score alcançado
+            print(paste(100 * count / total_models, &#39;%, melhor resultado: &#39;, min(features$rmsle)))
+            # Salvando dataframe com os resultados gerados em um arquivo .csv
+            write.csv(x = features, file = &quot;features.csv&quot;,row.names = FALSE)
+          }}}}
+    features}}</code></pre>
+</div>
+<div id="executando-a-função-criada" class="section level3" number="4.5.2">
+<h3><span class="header-section-number">4.5.2</span> Executando a função criada</h3>
+<pre class="r"><code>features &lt;- model_parameters(
+  data        = as.matrix(data_train %&gt;% select(- Demanda_uni_equil)), 
+  label       = data_train$Demanda_uni_equil, 
+  maxDepth    = 12:14, 
+  nEta        = 0.2, 
+  nRounds     = 85:87, 
+  subsample   = 0.85,
+  colsample   = 0.7,
+  statusPrint = F
+)</code></pre>
+<div id="visualizando-dataframe-com-os-resultados-obtidos-no-treinamento." class="section level4" number="4.5.2.1">
+<h4><span class="header-section-number">4.5.2.1</span> Visualizando dataframe com os resultados obtidos no treinamento.</h4>
+<pre class="r"><code>featuresXGboost &lt;- fread(&quot;features.csv&quot;)
+featuresXGboost</code></pre>
+<pre><code>##    maxDepth eta nRounds    d   e     rmsle
+## 1:       12 0.2      85 0.85 0.7 0.5555227
+## 2:       12 0.2      86 0.85 0.7 0.5552124
+## 3:       12 0.2      87 0.85 0.7 0.5535915
+## 4:       13 0.2      85 0.85 0.7 0.5466205
+## 5:       13 0.2      86 0.85 0.7 0.5444321
+## 6:       13 0.2      87 0.85 0.7 0.5462198
+## 7:       14 0.2      85 0.85 0.7 0.5326294
+## 8:       14 0.2      86 0.85 0.7 0.5329499
+## 9:       14 0.2      87 0.85 0.7 0.5347218</code></pre>
+<p>Podemos ver que o melhor resultadeo está na linha 7</p>
+<pre class="r"><code>bestXGboost &lt;- featuresXGboost[7,] 
+bestXGboost</code></pre>
+<pre><code>##    maxDepth eta nRounds    d   e     rmsle
+## 1:       14 0.2      85 0.85 0.7 0.5326294</code></pre>
+</div>
+</div>
+</div>
+<div id="criando-modelo-definitivo" class="section level2" number="4.6">
+<h2><span class="header-section-number">4.6</span> Criando modelo definitivo</h2>
+<pre class="r"><code>dTrain &lt;- xgb.DMatrix(data  = as.matrix(data_train %&gt;% select(- Demanda_uni_equil)),
+                      label = data_train$Demanda_uni_equil) #dados de treino em forma de matrix densa
+
+
+
+model_final &lt;-  xgb.train(params = list(objective = &quot;reg:linear&quot;, booster= &quot;gbtree&quot;,
+                                        eta = bestXGboost$eta, max_depth = bestXGboost$maxDepth, subsample = bestXGboost$d,
+                                        colsample_bytree = bestXGboost$e),
+                          data = dTrain, feval = rmsle,  bestXGboost$nRounds,
+                          verbose = T, maximize = F, nthread =15)</code></pre>
+</div>
+<div id="fazendo-as-previsões-e-descobrindo-o-score-do-modelo" class="section level2" number="4.7">
+<h2><span class="header-section-number">4.7</span> Fazendo as previsões e descobrindo o score do modelo</h2>
+<pre class="r"><code>pred_final &lt;- ifelse(
+  predict(model_final, as.matrix(data_test %&gt;% select(- Demanda_uni_equil))) &lt;0,0,
+  predict(model_final, as.matrix(data_test %&gt;% select(- Demanda_uni_equil))))
+
+rmsle(preds = pred_final, actuals = data_test$Demanda_uni_equil)</code></pre>
+<pre><code>## [1] 0.5789045</code></pre>
+<div id="obtemos-assim-um-score-rmsle-de-0.5789045." class="section level3" number="4.7.1">
+<h3><span class="header-section-number">4.7.1</span> Obtemos, assim, um score RMSLE de 0.5789045.</h3>
+<p>OBS: Este score foi obtido utilizando uma pequena amostra dos dados(5 MI, de um total de mais de 74 Mi. Caso todo o dataset disponibilizado fosse executado, teríamos um score menor (melhor).</p>
+</div>
+</div>
+</div>
+<div id="dúvidas-sugestões-e-críticas-entre-em-contato" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> Dúvidas, sugestões e críticas: entre em contato! :)</h1>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
