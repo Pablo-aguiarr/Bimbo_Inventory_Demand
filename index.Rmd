@@ -19,7 +19,9 @@ output: html_document
 
 # **Bimbo Inventory Demand **
 
-Olá! esse é um projeto que fiz baseado em uma competição do Kaggle. Espero que você curta!
+   Olá! Meu nome é Pablo e na outra aba você encontra meu projeto. esse é um projeto que fiz baseado em uma competição do Kaggle, onde usamos XGboost para prever a demanda por produtos da marca Bimbo. Minhas redes estão no final do relatório, entre em contato!
+
+![Kaggle and Bimbo logo](images/bimbo.png)
 
 
 
